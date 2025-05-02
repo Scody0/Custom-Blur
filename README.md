@@ -1,4 +1,5 @@
-# Custom Blur
+<h1 align="center">⭐ Custom Blur ⭐</h1>
+<p align="center">
 
 ![Custom Blur Logo](png.gif/1.png) <!-- Replace with actual logo or screenshot -->
 
