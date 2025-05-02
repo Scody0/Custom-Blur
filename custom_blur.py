@@ -426,7 +426,7 @@ def make_window_transparent(hwnd, alpha=255):
 def enable_blur(hwnd, blur_type=ACCENT_ENABLE_BLURBEHIND, opacity=0, intensity=0):
     """Enable blur with specified type, opacity, and intensity"""
     try:
-        gradient_color = (opacity << 24) | 0x000000  # ARGB format
+        gradient_color = (opacity << 24) | 0x000000
         accent = ACCENT_POLICY()
         accent.AccentState = blur_type
         accent.AccentFlags = 0
@@ -450,7 +450,7 @@ def disable_blur(hwnd, original_styles, original_alpha):
     """Disable blur and restore original window state"""
     try:
         accent = ACCENT_POLICY()
-        accent.AccentState = 0  # Disable all accent states
+        accent.AccentState = 0
         accent.AccentFlags = 0
         accent.GradientColor = 0
         accent.AnimationId = 0
@@ -509,15 +509,15 @@ class CustomBlurApp:
     def __init__(self, root):
         self.root = root
         self.language = self.load_language()
-        ctk.set_appearance_mode("dark")  # Set dark mode
+        ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("dark-blue")
         root.title(LOCALIZATION[self.language]["title"])
         root.geometry("800x600")
-        root.resizable(False, False)  # Make window non-resizable
+        root.resizable(False, False)
 
         self.selected_hwnd = None
-        self.history = {}  # {hwnd: deque of settings}
-        self.original_states = {}  # {hwnd: (styles, alpha)}
+        self.history = {}
+        self.original_states = {}
         self.max_history = 20
         self.window_list = []
         self.profiles = self.load_profiles()
@@ -821,8 +821,6 @@ class CustomBlurApp:
             styles = GetWindowLong(self.selected_hwnd, GWL_EXSTYLE)
             alpha = 255
             if styles & WS_EX_LAYERED:
-                # If already layered, get current alpha
-                # Note: Windows doesn't provide a direct way to get current alpha, so we assume 255
                 alpha = 255
             self.original_states[self.selected_hwnd] = (styles, alpha)
 
