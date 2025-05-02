@@ -1,21 +1,9 @@
 # Custom Blur
 
-![Custom Blur Logo](https://via.placeholder.com/150) <!-- Replace with actual logo or screenshot -->
+![Custom Blur Logo](png.gif/1.png) <!-- Replace with actual logo or screenshot -->
 
-**Custom Blur** is a lightweight Windows application that allows users to apply stunning blur and transparency effects to any window. With an intuitive interface, multilingual support, and customizable profiles, it offers a unique way to enhance your desktop experience. Whether you want a subtle blur or a vibrant acrylic effect, Custom Blur has you covered.
+**Custom Blur** is a lightweight Windows application that allows users to apply stunning blur and transparency effects to any window. With an intuitive interface, multilingual support, and customizable profiles, it offers a unique way to enhance your desktop experience.
 
----
-
-## Features
-
-- **Window Effects**: Apply standard or acrylic blur and adjust transparency for any visible window.
-- **Multilingual Support**: Available in English, Russian, Ukrainian, Belarusian, German, Spanish, and French.
-- **Profile Management**: Save and load effect profiles for quick application to specific windows.
-- **Auto-Refresh**: Automatically update the window list to keep your workspace dynamic.
-- **Undo & Reset**: Easily revert changes or reset windows to their original state.
-- **Fixed Window Size**: Consistent 800x600 interface for a streamlined experience.
-- **Dark Mode**: Sleek, modern UI optimized for dark mode.
-- **About Section**: Learn about the program with version details and developer info.
 
 ---
 
@@ -23,9 +11,7 @@
 
 | Main Interface | About Dialog |
 |----------------|--------------|
-| ![Main Interface](https://via.placeholder.com/400x300?text=Main+Interface) | ![About Dialog](https://via.placeholder.com/400x300?text=About+Dialog) |
-
-*Replace placeholders with actual screenshots by uploading images to your repository (e.g., `screenshots/main.png`).*
+| ![Main Interface](png.gif/2.png) | ![About Dialog](png.gif/3.png) |
 
 ---
 
@@ -61,6 +47,9 @@ pip install -r requirements.txt
 ---
 
 ## Usage
+| Transparency | Blur Effect |
+|----------------|--------------|
+| ![Custom Blur Logo](png.gif/2.gif) | ![Custom Blur Logo](png.gif/1.gif) |
 
 1. **Launch the Application**:
    Run `custom_blur.py` to open the Custom Blur interface.
@@ -88,39 +77,15 @@ pip install -r requirements.txt
 
 ---
 
+
 ## About
 
 - **Version**: 0.0.1
-- **Developer**: Scody0
-- **GitHub**: [https://github.com/Scody0](https://github.com/Scody0)
+- **Developer**: Scody
+- **GitHub**: [Scody](https://github.com/Scody0)
 - **License**: MIT
 
 Custom Blur is an open-source project designed to bring aesthetic window effects to Windows users. Contributions and feedback are welcome!
-
----
-
-## Contributing
-
-We love contributions! To contribute to Custom Blur:
-
-1. **Fork the Repository**:
-   Click the "Fork" button on GitHub to create your own copy.
-
-2. **Create a Branch**:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-
-3. **Make Changes**:
-   Implement your feature or bug fix, ensuring code quality and documentation.
-
-4. **Test Thoroughly**:
-   Test your changes on Windows 10/11 to ensure compatibility.
-
-5. **Submit a Pull Request**:
-   Push your branch to your fork and create a pull request with a clear description.
-
-Please follow our [Code of Conduct](CODE_OF_CONDUCT.md) and ensure your changes align with the project’s goals.
 
 ---
 
@@ -150,7 +115,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-- **Developer**: Scody0
+- **Developer**: Scody
 - **GitHub**: [https://github.com/Scody0](https://github.com/Scody0)
 - **Issues**: [https://github.com/Scody0/Custom-Blur/issues](https://github.com/Scody0/Custom-Blur/issues)
 
@@ -158,4 +123,4 @@ Feel free to reach out with questions, suggestions, or feedback!
 
 ---
 
-*Built with ❤️ by Scody0*
+*Built with ❤️ by Scody*
