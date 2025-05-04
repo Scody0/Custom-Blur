@@ -9,7 +9,6 @@ import os
 import logging
 from datetime import datetime
 
-# WinAPI constants
 GWL_EXSTYLE = -20
 WS_EX_LAYERED = 0x80000
 LWA_ALPHA = 0x2
@@ -26,7 +25,6 @@ SetLayeredWindowAttributes = user32.SetLayeredWindowAttributes
 SetWindowCompositionAttribute = user32.SetWindowCompositionAttribute
 DwmSetWindowAttribute = dwmapi.DwmSetWindowAttribute
 
-# Structures for blur
 class ACCENT_POLICY(ctypes.Structure):
     _fields_ = [
         ("AccentState", ctypes.c_int),
@@ -42,7 +40,6 @@ class WINDOWCOMPOSITIONATTRIBDATA(ctypes.Structure):
         ("SizeOfData", ctypes.c_size_t)
     ]
 
-# Localization dictionary
 LOCALIZATION = {
     "en": {
         "title": "Custom Blur",
@@ -117,7 +114,7 @@ LOCALIZATION = {
         "window_list_refreshed": "Список окон обновлён",
         "selected": "Выбрано: {}",
         "window_not_found": "Окно не найдено!",
-        "transparency_set": "Прозрачность: {}",
+        "transparency_set": "Прозрач kapalı: {}",
         "blur_enabled": "Блюр включён",
         "blur_disabled": "Блюр выключен",
         "blur_type_set": "Тип блюра: {}",
@@ -411,7 +408,6 @@ LOCALIZATION = {
 }
 
 def make_window_transparent(hwnd, alpha=255):
-    """Set window transparency"""
     try:
         styles = GetWindowLong(hwnd, GWL_EXSTYLE)
         if not styles:
@@ -424,7 +420,6 @@ def make_window_transparent(hwnd, alpha=255):
         return False
 
 def enable_blur(hwnd, blur_type=ACCENT_ENABLE_BLURBEHIND, opacity=0, intensity=0):
-    """Enable blur with specified type, opacity, and intensity"""
     try:
         gradient_color = (opacity << 24) | 0x000000
         accent = ACCENT_POLICY()
@@ -447,7 +442,6 @@ def enable_blur(hwnd, blur_type=ACCENT_ENABLE_BLURBEHIND, opacity=0, intensity=0
         return False
 
 def disable_blur(hwnd, original_styles, original_alpha):
-    """Disable blur and restore original window state"""
     try:
         accent = ACCENT_POLICY()
         accent.AccentState = 0
@@ -472,7 +466,6 @@ def disable_blur(hwnd, original_styles, original_alpha):
         return False
 
 def is_dwm_composition_enabled():
-    """Check if DWM composition is enabled"""
     try:
         enabled = ctypes.c_bool()
         dwmapi.DwmIsCompositionEnabled(ctypes.byref(enabled))
@@ -522,11 +515,9 @@ class CustomBlurApp:
         self.window_list = []
         self.profiles = self.load_profiles()
 
-        # Main container
         self.main_frame = ctk.CTkFrame(root, corner_radius=0, fg_color="#1a1a1a")
         self.main_frame.pack(fill="both", expand=True)
 
-        # Top bar for about
         self.top_bar = ctk.CTkFrame(self.main_frame, corner_radius=0, fg_color="#2b2b2b")
         self.top_bar.pack(side="top", fill="x")
 
@@ -534,14 +525,12 @@ class CustomBlurApp:
         self.about_button.pack(side="left", padx=10, pady=5)
         Tooltip(self.about_button, LOCALIZATION[self.language]["tooltip_about"])
 
-        # Sidebar for window selection
         self.sidebar = ctk.CTkFrame(self.main_frame, width=300, corner_radius=0, fg_color="#2b2b2b")
         self.sidebar.pack(side="left", fill="y", padx=(0, 1))
 
         self.title_label = ctk.CTkLabel(self.sidebar, text=LOCALIZATION[self.language]["title"], font=("Roboto", 18, "bold"), text_color="#ffffff")
         self.title_label.pack(pady=20)
 
-        # Language selector
         self.language_label = ctk.CTkLabel(self.sidebar, text=LOCALIZATION[self.language]["language"], font=("Roboto", 12), text_color="#cccccc")
         self.language_label.pack(pady=10, padx=10, anchor="w")
         self.language_menu = ctk.CTkOptionMenu(
@@ -567,7 +556,6 @@ class CustomBlurApp:
         self.window_label = ctk.CTkLabel(self.sidebar, text=LOCALIZATION[self.language]["windows"], font=("Roboto", 12), text_color="#cccccc")
         self.window_label.pack(pady=10, padx=10, anchor="w")
 
-        # Scrollable frame for window list
         self.window_frame = ctk.CTkScrollableFrame(self.sidebar, height=300, width=280, fg_color="#333333")
         self.window_frame.pack(padx=10, pady=5)
 
@@ -593,14 +581,12 @@ class CustomBlurApp:
         self.auto_refresh_toggle = ctk.CTkSwitch(self.sidebar, text=LOCALIZATION[self.language]["auto_refresh"], command=self.toggle_auto_refresh, fg_color="#3a3a3a", progress_color="#1f6aa5")
         self.auto_refresh_toggle.pack(pady=5)
         Tooltip(self.auto_refresh_toggle, LOCALIZATION[self.language]["tooltip_auto_refresh"])
-        self.auto_refresh_interval = 5000  # 5 seconds
+        self.auto_refresh_interval = 5000
         self.auto_refresh_id = None
 
-        # Controls frame
         self.controls_frame = ctk.CTkFrame(self.main_frame, corner_radius=15, fg_color="#2b2b2b")
         self.controls_frame.pack(side="right", fill="both", expand=True, padx=20, pady=20)
 
-        # Transparency controls
         self.trans_label = ctk.CTkLabel(self.controls_frame, text=LOCALIZATION[self.language]["transparency"], font=("Roboto", 14), text_color="#cccccc")
         self.trans_label.pack(pady=10)
         self.transparency_scale = ctk.CTkSlider(self.controls_frame, from_=50, to=255, command=self.update_transparency, button_color="#1f6aa5", progress_color="#1f6aa5")
@@ -608,7 +594,6 @@ class CustomBlurApp:
         self.transparency_scale.pack(pady=5, padx=20)
         Tooltip(self.transparency_scale, LOCALIZATION[self.language]["tooltip_transparency"])
 
-        # Blur controls
         self.blur_label = ctk.CTkLabel(self.controls_frame, text=LOCALIZATION[self.language]["blur_effect"], font=("Roboto", 14), text_color="#cccccc")
         self.blur_label.pack(pady=10)
         self.blur_toggle = ctk.CTkSwitch(self.controls_frame, text=LOCALIZATION[self.language]["enable_blur"], command=self.toggle_blur, fg_color="#3a3a3a", progress_color="#1f6aa5")
@@ -640,7 +625,6 @@ class CustomBlurApp:
         self.tint_opacity_scale.pack(pady=5, padx=20)
         Tooltip(self.tint_opacity_scale, LOCALIZATION[self.language]["tooltip_tint_opacity"])
 
-        # Profile controls
         self.profile_frame = ctk.CTkFrame(self.controls_frame, corner_radius=10, fg_color="#333333")
         self.profile_frame.pack(pady=10, padx=10, fill="x")
         self.save_profile_button = ctk.CTkButton(self.profile_frame, text=LOCALIZATION[self.language]["save_profile"], command=self.save_profile, width=100, fg_color="#3a3a3a", hover_color="#4a4a4a")
@@ -650,7 +634,6 @@ class CustomBlurApp:
         self.load_profile_button.pack(side="left", padx=5)
         Tooltip(self.load_profile_button, LOCALIZATION[self.language]["tooltip_load_profile"])
 
-        # Undo and reset
         self.action_frame = ctk.CTkFrame(self.controls_frame, corner_radius=10, fg_color="#333333")
         self.action_frame.pack(pady=10, padx=10, fill="x")
         self.undo_button = ctk.CTkButton(self.action_frame, text=LOCALIZATION[self.language]["undo"], command=self.undo, width=100, fg_color="#3a3a3a", hover_color="#4a4a4a")
@@ -660,7 +643,6 @@ class CustomBlurApp:
         self.reset_button.pack(side="left", padx=5)
         Tooltip(self.reset_button, LOCALIZATION[self.language]["tooltip_reset"])
 
-        # Status
         self.status = ctk.CTkLabel(self.controls_frame, text=LOCALIZATION[self.language]["ready"], font=("Roboto", 12), text_color="#cccccc")
         self.status.pack(pady=10)
 
@@ -669,7 +651,6 @@ class CustomBlurApp:
             self.start_auto_refresh()
 
     def load_language(self):
-        """Load language from config file"""
         config_file = "blur_config.json"
         default_language = "en"
         try:
@@ -682,7 +663,6 @@ class CustomBlurApp:
         return default_language
 
     def save_language(self):
-        """Save language to config file"""
         config_file = "blur_config.json"
         try:
             config = {"language": self.language}
@@ -692,7 +672,6 @@ class CustomBlurApp:
             logging.error(f"Error saving language: {e}")
 
     def load_profiles(self):
-        """Load saved profiles"""
         profiles_file = "blur_profiles.json"
         try:
             if os.path.exists(profiles_file):
@@ -703,7 +682,6 @@ class CustomBlurApp:
         return {}
 
     def save_profiles(self):
-        """Save profiles to file"""
         profiles_file = "blur_profiles.json"
         try:
             with open(profiles_file, "w", encoding="utf-8") as f:
@@ -712,7 +690,6 @@ class CustomBlurApp:
             logging.error(f"Error saving profiles: {e}")
 
     def change_language(self, language_name):
-        """Change the application language"""
         language_map = {
             "English": "en",
             "Русский": "ru",
@@ -727,7 +704,6 @@ class CustomBlurApp:
         self.update_ui_texts()
 
     def show_about(self):
-        """Show about dialog"""
         about_dialog = ctk.CTkToplevel(self.root)
         about_dialog.title(LOCALIZATION[self.language]["about"])
         about_dialog.geometry("400x250")
@@ -749,7 +725,6 @@ class CustomBlurApp:
         close_button.pack(pady=20)
 
     def update_ui_texts(self):
-        """Update all UI elements with the current language"""
         try:
             self.root.title(LOCALIZATION[self.language]["title"])
             self.title_label.configure(text=LOCALIZATION[self.language]["title"])
@@ -775,25 +750,21 @@ class CustomBlurApp:
             logging.error(f"Error updating UI texts: {e}")
 
     def toggle_auto_refresh(self):
-        """Toggle auto-refresh of window list"""
         if self.auto_refresh_toggle.get():
             self.start_auto_refresh()
         else:
             self.stop_auto_refresh()
 
     def start_auto_refresh(self):
-        """Start auto-refreshing the window list"""
         self.refresh_list()
         self.auto_refresh_id = self.root.after(self.auto_refresh_interval, self.start_auto_refresh)
 
     def stop_auto_refresh(self):
-        """Stop auto-refreshing the window list"""
         if self.auto_refresh_id:
             self.root.after_cancel(self.auto_refresh_id)
             self.auto_refresh_id = None
 
     def refresh_list(self):
-        """Refresh the list of active windows"""
         try:
             self.window_listbox.delete(0, tk.END)
             self.window_list = []
@@ -808,7 +779,6 @@ class CustomBlurApp:
             self.status.configure(text=LOCALIZATION[self.language]["error"])
 
     def select_window(self, event=None):
-        """Handle window selection from the listbox"""
         try:
             selection_index = self.window_listbox.curselection()
             if not selection_index:
@@ -817,7 +787,6 @@ class CustomBlurApp:
             window = gw.getWindowsWithTitle(selection)[0]
             self.selected_hwnd = window._hWnd
 
-            # Store original window state
             styles = GetWindowLong(self.selected_hwnd, GWL_EXSTYLE)
             alpha = 255
             if styles & WS_EX_LAYERED:
